@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDo App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #todoApp {
+      max-width: 400px;
+      width: 100%;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #tasks {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .task {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      color: #888;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    input[type="text"] {
+      width: 70%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+
+    button {
+      padding: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="todoApp">
+  <h1>ToDo App</h1>
+  <div>
+    <input type="text" id="taskInput" placeholder="Add a new task...">
+    <button onclick="addTask()">Add</button>
+  </div>
+
+  <h2>Pending Tasks</h2>
+  <ul id="pendingTasks" class="tasks"></ul>
+
+  <h2>Completed Tasks</h2>
+  <ul id="completedTasks" class="tasks"></ul>
+</div>
+
+<script>
+  function addTask() {
+    const taskInput = document.getElementById('taskInput');
+    const taskText = taskInput.value.trim();
+
+    if (taskText !== '') {
+      const task = createTaskElement(taskText);
+      document.getElementById('pendingTasks').appendChild(task);
+      taskInput.value = '';
+    }
+  }
+
+  function createTaskElement(text) {
+    const task = document.createElement('li');
+    task.className = 'task';
+    task.innerHTML = `
+      <span>${text}</span>
+      <div class="actions">
+        <button onclick="completeTask(this.parentNode.parentNode)">Complete</button>
+        <button onclick="editTask(this.parentNode.parentNode)">Edit</button>
+        <button onclick="deleteTask(this.parentNode.parentNode)">Delete</button>
+      </div>
+    `;
+    return task;
+  }
+
+  function completeTask(taskElement) {
+    taskElement.classList.toggle('completed');
+    const tasksContainer = document.getElementById('completedTasks');
+    tasksContainer.appendChild(taskElement);
+  }
+
+  function editTask(taskElement) {
+    const span = taskElement.querySelector('span');
+    const newText = prompt('Edit task:', span.innerText);
+
+    if (newText !== null && newText.trim() !== '') {
+      span.innerText = newText.trim();
+    }
+  }
+
+  function deleteTask(taskElement) {
+    taskElement.parentNode.removeChild(taskElement);
+  }
+</script>
+
+</body>
+</html>
